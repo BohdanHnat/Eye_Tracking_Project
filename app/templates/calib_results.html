@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calibration Results | Artful Mindsight</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='results.css') }}">
+</head>
+<body>
+    <div class="results-container">
+        <h1>Calibration Results</h1>
+        <h3>Mean Center: ({{ mean_center[0]|round(4) }}, {{ mean_center[1]|round(4) }})</h3>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Target</th>
+                    <th>Centered X</th>
+                    <th>Centered Y</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for pos, coords in calib_results.items() %}
+                <tr>
+                    <td>{{ pos.replace('_', ' ').title() }}</td>
+                    <td>{{ coords[0]|round(4) }}</td>
+                    <td>{{ coords[1]|round(4) }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <h3>Raw Values (per Target)</h3>
+        {% for pos, vals in raw_values.items() %}
+            <b>{{ pos.replace('_', ' ').title() }}:</b> {{ vals }}<br>
+        {% endfor %}
+        <br>
+        <a href="{{ url_for('calibration') }}">Restart Calibration</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calibration | Artful Mindsight</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='calibration.css') }}">
+</head>
+<body>
+  <div class="main-container">
+    <div class="calib-header">
+      Calibration in progress – focus your gaze on the green dot
+    </div>
+
+    <div class="calib-video-container">
+      <img src="{{ url_for('video_feed') }}" class="calib-video" alt="Calibration Video Feed">
+    </div>
+
+    <div class="calib-footer">
+      <form method="POST" action="{{ url_for('start_calibration') }}" style="display:inline;">
+        <button type="submit">Start</button>
+      </form>
+      <form method="POST" action="{{ url_for('next_target') }}" style="display:inline;">
+        <button type="submit">Next</button>
+      </form>
+      {% if calib_completed %}
+        <a href="{{ url_for('calibration_results') }}" class="results-button">View Results</a>
+        <a href="{{ url_for('eye_tracking') }}" class="results-button">Begin Eye Tracking</a>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

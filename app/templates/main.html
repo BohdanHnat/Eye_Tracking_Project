@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Artful Mindsight</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <h1>Artful Mindsight</h1>
+        <div class="intro">
+            <p>
+                <strong>Artful Mindsight</strong> is a student-driven research project that explores the intersection of eye tracking, neural feedback, and emotional response to provocative and stimulative artworks. Using state-of-the-art gaze detection technology, the project aims to uncover how our minds react to art on both conscious and subconscious levels.
+            </p>
+        </div>
+        <div class="developer">
+            Developed by Bohdan Hnat, 2025
+        </div>
+        <div class="redirect-button">
+            <form action="{{ url_for('calibration') }}" method="post" style="display:inline;">
+                <button type="submit">Start Eye Tracking</button>
+            </form>
+            <form action="{{ url_for('reset_session') }}" method="post" style="display:inline; margin-left: 24px;">
+                <button type="submit" class="reset-btn">Reset Session</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

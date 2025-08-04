@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eye Tracking Results | Artful Mindsight</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='eye_tracking.css') }}">
+</head>
+<body>
+    <div class="et-main-layout">
+        <!-- Sidebar: header, image list, and bottom buttons -->
+        <aside class="et-sidebar">
+            <div class="et-sidebar-header">
+                Eye Tracking Results – Select an image to view its heatmap
+            </div>
+            <ul class="et-image-list">
+                {% for img in processed_images %}
+                <li>
+                    <form method="get" action="{{ url_for('eye_tracking_results') }}">
+                        <input type="hidden" name="image" value="{{ img }}">
+                        <button type="submit" class="et-image-btn" {% if img == selected_image %} disabled {% endif %}>
+                            ▶
+                        </button>
+                        <span class="et-image-label">{{ img }}</span>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            <div class="et-sidebar-footer">
+                <a href="{{ url_for('calibration') }}" class="et-nav-button">Restart Calibration</a>
+                <a href="{{ url_for('eye_tracking') }}" class="et-nav-button">Back to Eye Tracking</a>
+            </div>
+        </aside>
+        <div class="et-content">
+            <div class="et-image-true-bg">
+                <!-- Overlayed images, perfectly aligned, fixed display area -->
+                <div style="position:relative; width:100%; height:100%;">
+                    <img src="{{ url_for('static', filename=selected_image) }}"
+                         class="et-main-image-true"
+                         style="position:absolute; top:0; left:0; z-index:1;">
+
+                    <img src="{{ url_for('gaze_heatmap', image=selected_image) }}"
+                         class="et-main-image-true"
+                         style="position:absolute; top:0; left:0; z-index:2; pointer-events:none;">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

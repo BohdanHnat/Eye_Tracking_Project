@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eye Tracking Experience</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='eye_tracking.css') }}">
+</head>
+<body>
+    <div class="et-main-layout">
+        <!-- Sidebar: header, image list, notification, and bottom buttons -->
+        <aside class="et-sidebar">
+            <div class="et-sidebar-header">
+                Eye Tracking Experiment – Focus on the visual below
+            </div>
+            <ul class="et-image-list">
+                {% for img in image_files %}
+                <li>
+                    <form method="get" action="{{ url_for('eye_tracking') }}">
+                        <input type="hidden" name="image" value="{{ img }}">
+                        <button type="submit" class="et-image-btn" {% if img == selected_image %}disabled{% endif %}>
+                            ▶
+                        </button>
+                        <span class="et-image-label">{{ img }}</span>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+            {% if tracking_in_progress %}
+            <div class="et-sidebar-notification">
+                <span>🟡 Eye tracking in progress…</span>
+                <div id="et-timer" style="margin-top: 8px;">
+                    <span id="et-timer-elapsed">0</span> / {{ tracking_seconds }} seconds
+                </div>
+            </div>
+            {% endif %}
+            <div class="et-sidebar-footer">
+                <a href="{{ url_for('calibration') }}" class="et-nav-button">Restart Calibration</a>
+                <a href="{{ url_for('start_eye_tracking', image=selected_image) }}" class="et-nav-button">Start Eye Tracking</a>
+            </div>
+        </aside>
+        <!-- Main image display area -->
+        <div class="et-content">
+            <div class="et-image-true-bg">
+                <img src="{{ url_for('static', filename=selected_image) }}"
+                     alt="Experiment Visual"
+                     class="et-main-image-true">
+            </div>
+        </div>
+    </div>
+
+    {% if tracking_in_progress %}
+    <!-- Import polling script and initialize if tracking is active -->
+    <script src="{{ url_for('static', filename='js_scripts/eye_tracking_poll.js') }}"></script>
+    <script>
+        startEyeTrackingPolling(
+            "{{ url_for('eye_tracking_results', image=selected_image) }}",
+            "{{ url_for('eye_tracking_status') }}",
+            {{ tracking_seconds|int }}
+        );
+    </script>
+    {% endif %}
+</body>
+</html>
