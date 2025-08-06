@@ -1,10 +1,8 @@
 import cv2
 import mediapipe as mp
-from screeninfo import get_monitors
 
 # Get the resolution of the primary monitor
-monitor = get_monitors()[0]
-w, h = monitor.width, monitor.height
+w, h = 1920, 1080
 
 CAM_FPS = 60
 
