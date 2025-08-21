@@ -4,6 +4,7 @@ body {
     padding: 40px;
     background-color: #f7f7fa;
 }
+
 .main-container {
     max-width: 700px;
     margin: 60px auto 0 auto;
@@ -12,26 +13,31 @@ body {
     box-shadow: 0 4px 24px rgba(0,0,0,0.06);
     padding: 40px 40px 32px 40px;
 }
+
 h1 {
     font-size: 2.6rem;
     margin-bottom: 10px;
     color: #1e2761;
 }
+
 .intro {
     font-size: 1.25rem;
     margin-bottom: 38px;
     color: #313152;
     line-height: 1.6;
 }
+
 .developer {
     font-size: 1rem;
     margin-bottom: 20px;
     color: #585872;
 }
+
 .redirect-button {
     text-align: center;
     margin-top: 25px;
 }
+
 button {
     padding: 14px 38px;
     font-size: 1.15rem;
@@ -43,6 +49,7 @@ button {
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     transition: background 0.2s;
 }
+
 button:hover {
     background: #3242b0;
 }

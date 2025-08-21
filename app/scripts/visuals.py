@@ -1,6 +1,6 @@
-import cv2
-import numpy as np
 from PIL import Image
+import numpy as np
+import cv2
 import io
 
 import matplotlib
@@ -12,7 +12,7 @@ def draw_target(frame, target_position="center"):
     x_center = w // 2
     y_center = h // 2
 
-    # Slightly inset targets from the frame edge (e.g., 5% in)
+    # Margin targets from the frame edge (1% in)
     margin_x = int(w * 0.01)
     margin_y = int(h * 0.01)
 
@@ -30,34 +30,29 @@ def draw_target(frame, target_position="center"):
 
     if target_position not in positions:
         raise ValueError(
-            "target_position must be one of: " +
-            ", ".join(positions.keys())
+            "'target_position' must be one of: " + ", ".join(positions.keys())
         )
 
     x_target, y_target = positions[target_position]
 
-    # Draw outer circle (white) for contrast, then green filled circle
+    # Draw visual target circles
     cv2.circle(frame, (x_target, y_target), radius=22, color=(255,255,255), thickness=5)
     cv2.circle(frame, (x_target, y_target), radius=15, color=(0, 255, 0), thickness=-1)
 
     return frame
 
 def generate_heatmap(gaze_data, bg_image_file, bins=100, alpha=0.5):
-
     x = np.array([row['norm_x'] for row in gaze_data])
     y = np.array([row['norm_y'] for row in gaze_data])
 
     bg_image = Image.open(bg_image_file).convert('RGB')
     width, height = bg_image.size
 
-    # If data is already in [0, width]/[0, height] range, skip normalization.
-    # If data is roughly in [-1, 1], map to [0, width]/[0, height]
     if np.min(x) < 0 or np.max(x) > width:
         x = ((x - np.min(x)) / (np.max(x) - np.min(x))) * width
     if np.min(y) < 0 or np.max(y) > height:
         y = ((y - np.min(y)) / (np.max(y) - np.min(y))) * height
 
-    # Create 2D histogram heatmap
     heatmap, xedges, yedges = np.histogram2d(x, y, bins=[bins, bins], range=[[0, width], [0, height]])
 
     # Plot image and overlay heatmap
@@ -83,4 +78,5 @@ def generate_heatmap(gaze_data, bg_image_file, bins=100, alpha=0.5):
     buf.seek(0)
     result_img = Image.open(buf).copy()
     buf.close()
+
     return result_img

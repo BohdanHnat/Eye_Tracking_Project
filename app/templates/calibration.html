@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Calibration | Artful Mindsight</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='calibration.css') }}">
+    <title>Calibration Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css_files/calibration.css') }}">
 </head>
 <body>
   <div class="main-container">
+
     <div class="calib-header">
       Calibration in progress – focus your gaze on the green dot
     </div>
 
     <div class="calib-video-container">
-      <img src="{{ url_for('video_feed') }}" class="calib-video" alt="Calibration Video Feed">
+      <video id="webcam" autoplay playsinline style="display:none;"></video>
+      <canvas id="frame-canvas" width="1280" height="720" style="display:none;"></canvas>
+      <img id="calib-processed" class="calib-video-large" alt="Calibration Feedback">
     </div>
 
     <div class="calib-footer">
@@ -21,11 +24,52 @@
       <form method="POST" action="{{ url_for('next_target') }}" style="display:inline;">
         <button type="submit">Next</button>
       </form>
+
       {% if calib_completed %}
-        <a href="{{ url_for('calibration_results') }}" class="results-button">View Results</a>
+        <a href="{{ url_for('homepage') }}" class="results-button">Home</a>
         <a href="{{ url_for('eye_tracking') }}" class="results-button">Begin Eye Tracking</a>
       {% endif %}
     </div>
+    <script>
+      // Webcam capture
+      const video = document.getElementById('webcam');
+      const canvas = document.getElementById('frame-canvas');
+      const context = canvas.getContext('2d');
+      const img = document.getElementById('calib-processed');
+      let captureActive = true;
+
+      // Request webcam access
+      navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } })
+        .then((stream) => { video.srcObject = stream; })
+        .catch((err) => { alert('Camera access denied or unavailable'); });
+
+      // Send frames to backend at regular intervals
+      function sendFrame() {
+        if (!captureActive) return;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(function(blob) {
+          const formData = new FormData();
+          formData.append('frame', blob, 'frame.jpg');
+          fetch('{{ url_for("calibration_frame") }}', {
+            method: 'POST',
+            body: formData
+          })
+          .then(response => response.json())
+          .then(data => {
+            // Display processed frame dynamically
+            if (data.frame) {
+              img.src = 'data:image/jpeg;base64,' + data.frame;
+            }
+            if (data.calib_completed) {
+              captureActive = false;
+              img.classList.add('calib-complete'); // Optional: style if complete
+              alert('Calibration complete!');
+            }
+          });
+        }, 'image/jpeg');
+      }
+      setInterval(sendFrame, 120);
+    </script>
   </div>
 </body>
 </html>

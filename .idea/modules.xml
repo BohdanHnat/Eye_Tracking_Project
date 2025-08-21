@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/eye_tracker_web_app.iml" filepath="$PROJECT_DIR$/.idea/eye_tracker_web_app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/eye_tracker_web_app_new_cam.iml" filepath="$PROJECT_DIR$/.idea/eye_tracker_web_app_new_cam.iml" />
     </modules>
   </component>
 </project>

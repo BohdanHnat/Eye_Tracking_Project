@@ -66,6 +66,7 @@ html, body {
     cursor: pointer;
     transition: background 0.18s;
 }
+
 .et-image-btn:disabled {
     background: #7da5cb;
     cursor: not-allowed;
@@ -117,6 +118,7 @@ html, body {
     text-align: center;
     width: 80%;
 }
+
 .et-nav-button:hover {
     background: linear-gradient(90deg, #1861ad 60%, #12aee0 100%);
     color: #eaf5ff;
@@ -133,9 +135,8 @@ html, body {
     position: relative;
 }
 
-/* Fixed-size display area for image */
 .et-image-true-bg {
-    width: 1440px;     /* Adjust these to your preferred max area */
+    width: 1440px;
     height: 900px;
     display: flex;
     justify-content: center;
@@ -147,7 +148,6 @@ html, body {
     position: relative;
 }
 
-/* Main image: scales down to fit display area, never crops or stretches */
 .et-main-image-true {
     display: block;
     max-width: 100%;
